@@ -1,21 +1,51 @@
-import { defineConfig } from 'vite';
-import reactRefresh from '@vitejs/plugin-react-refresh'
+// @ts-check
+import prefresh from "@prefresh/vite";
+import { resolve } from 'path'
 
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [reactRefresh()],
+const root = "./assets";
 
+/**
+ * Rafraichi la page quand on modifie un fichier twig
+ */
+const twigRefreshPlugin = () => ({
+  name: 'twig-refresh',
+  configureServer({ watcher, ws }) {
+    watcher.add(resolve(__dirname, "templates/**/*.twig"));
+    watcher.on("change", function (path) {
+      if (path.endsWith(".twig")) {
+        ws.send({
+          type: 'full-reload',
+        })
+      }
+    });
+  }
+})
+
+/**
+ * @type { import('vite').UserConfig }
+ */
+const config = {
+  emitManifest: true,
+  cors: true,
+
+  base: '/assets/',
   build: {
-    manifest: true,
+    polyfillDynamicImport: false,
     assetsDir: '',
+    manifest: true,
     outDir: '../public/assets/',
     rollupOptions: {
       output: {
-        manualChunks: undefined // On ne veut pas créer un fichier vendors, car on n'a ici qu'un point d'entré
+        manualChunks: undefined // Désactive la séparation du vendor
       },
       input: {
-        input : './assets/main.js'
+        app: resolve(__dirname, 'assets/app.js'),
+        admin: resolve(__dirname, 'assets/admin.js')
       }
-    }
-  }
-});
+    },
+  },
+  plugins: [prefresh(), twigRefreshPlugin()],
+  root
+};
+
+module.exports = config;

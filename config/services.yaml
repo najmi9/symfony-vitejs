@@ -22,7 +22,6 @@ services:
             - '../src/Tests/'
 
     App\Twig\ViteAssetExtension:
-      arguments:
-        $manifest: '%kernel.project_dir%/public/assets/manifest.json'
-        $isDev: '%env(VITE_DEV)%'
-        $cache: '@vite_cache_pool'
+        arguments:
+            $assetPath: '%kernel.project_dir%/public/assets'
+            $env: '%kernel.environment%'
