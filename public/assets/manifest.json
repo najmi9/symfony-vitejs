@@ -1,0 +1,18 @@
+{
+  "main.jsx": {
+    "file": "main.jsx.fda02cf6.js",
+    "src": "main.jsx",
+    "isEntry": true,
+    "dynamicImports": [
+      "app.js"
+    ],
+    "css": [
+      "main.jsx.bfa4c68b.css"
+    ]
+  },
+  "app.js": {
+    "file": "app.4d80b8a6.js",
+    "src": "app.js",
+    "isDynamicEntry": true
+  }
+}
